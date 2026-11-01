@@ -7,11 +7,22 @@ workflows:
       flutter: stable
       java: 17
     scripts:
-      - name: Fix V1 Embedding
+      - name: Magic Fix - Rebuild Android Clean
         script: |
-          # إجبار الأندرويد على استخدام النظام الجديد
-          echo "android.useAndroidX=true" >> android/gradle.properties
-          echo "android.enableJetifier=true" >> android/gradle.properties
+          # 1. مسح فولدر الأندرويد القديم اللي فيه المشاكل
+          rm -rf android
+          
+          # 2. خلي الـ Flutter يعمل فولدر أندرويد جديد نضيف
+          flutter create --platforms=android .
+          
+          # 3. نرجع نكتب ملف الـ MainActivity بالطريقة الصح
+          mkdir -p android/app/src/main/kotlin/com/batteryassistant
+          cat > android/app/src/main/kotlin/com/batteryassistant/MainActivity.kt << 'EOF'
+          package com.batteryassistant.app
+          import io.flutter.embedding.android.FlutterActivity
+          class MainActivity: FlutterActivity() {
+          }
+          EOF
       - name: Get Flutter packages
         script: flutter pub get
       - name: Build APK
