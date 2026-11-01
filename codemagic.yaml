@@ -7,10 +7,19 @@ workflows:
       flutter: stable
       java: 17
     scripts:
-      - name: Recreate Android Platform Folders
+      - name: Clean up and Force V2 Embedding
         script: |
-          flutter create --platforms=android .
-          # إجبار المشروع على استخدام النظام الجديد
+          # مسح أي أثر للملفات القديمة
+          rm -rf android/app/src/main/kotlin
+          # إعادة إنشاء مجلد الكوتلن الصح
+          mkdir -p android/app/src/main/kotlin/com/batteryassistant
+          cat > android/app/src/main/kotlin/com/batteryassistant/MainActivity.kt << 'EOF'
+          package com.batteryassistant.app
+          import io.flutter.embedding.android.FlutterActivity
+          class MainActivity: FlutterActivity() {
+          }
+          EOF
+          # التعديل على ملف الـ gradle لإجباره على النظام الجديد
           echo "android.useAndroidX=true" >> android/gradle.properties
           echo "android.enableJetifier=true" >> android/gradle.properties
       - name: Get Flutter packages
