@@ -7,20 +7,11 @@ workflows:
       flutter: stable
       java: 17
     scripts:
-      - name: Force V2 Migration
+      - name: Fix V1 Embedding
         script: |
-          # تعديل ملف الـ pubspec عشان يشيل أي إشارة للنظام القديم
-          sed -i '/flutter_embedding/d' pubspec.yaml
-          # إجبار الأندرويد على النظام الجديد
+          # إجبار الأندرويد على استخدام النظام الجديد
           echo "android.useAndroidX=true" >> android/gradle.properties
           echo "android.enableJetifier=true" >> android/gradle.properties
-          # إعادة كتابة ملف الـ MainActivity بالطريقة الصح
-          rm -rf android/app/src/main/kotlin
-          mkdir -p android/app/src/main/kotlin/com/batteryassistant
-          echo "package com.batteryassistant.app" > android/app/src/main/kotlin/com/batteryassistant/MainActivity.kt
-          echo "import io.flutter.embedding.android.FlutterActivity" >> android/app/src/main/kotlin/com/batteryassistant/MainActivity.kt
-          echo "class MainActivity: FlutterActivity() {" >> android/app/src/main/kotlin/com/batteryassistant/MainActivity.kt
-          echo "}" >> android/app/src/main/kotlin/com/batteryassistant/MainActivity.kt
       - name: Get Flutter packages
         script: flutter pub get
       - name: Build APK
