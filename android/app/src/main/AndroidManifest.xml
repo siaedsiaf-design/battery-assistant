@@ -19,7 +19,6 @@
 
     <application
         android:label="Battery Assistant"
-        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
         <!-- ── MAIN ACTIVITY ── -->
