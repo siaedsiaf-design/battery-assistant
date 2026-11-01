@@ -7,6 +7,13 @@ workflows:
       flutter: stable
       java: 17
     scripts:
+      - name: Fix v1 Embedding & Upgrade Gradle
+        script: |
+          # إجبار التطبيق على استخدام النسخة الجديدة v2
+          echo "android.useAndroidX=true" >> android/gradle.properties
+          echo "android.enableJetifier=true" >> android/gradle.properties
+          # تحديث المكتبات عشان تتوافق مع أحدث إصدار
+          flutter pub upgrade --major-versions
       - name: Get Flutter packages
         script: flutter pub get
       - name: Build APK
