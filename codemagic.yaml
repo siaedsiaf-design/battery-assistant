@@ -9,13 +9,8 @@ workflows:
     scripts:
       - name: Magic Fix - Rebuild Android Clean
         script: |
-          # 1. مسح فولدر الأندرويد القديم اللي فيه المشاكل
           rm -rf android
-          
-          # 2. خلي الـ Flutter يعمل فولدر أندرويد جديد نضيف
           flutter create --platforms=android .
-          
-          # 3. نرجع نكتب ملف الـ MainActivity بالطريقة الصح
           mkdir -p android/app/src/main/kotlin/com/batteryassistant
           cat > android/app/src/main/kotlin/com/batteryassistant/MainActivity.kt << 'EOF'
           package com.batteryassistant.app
@@ -26,6 +21,6 @@ workflows:
       - name: Get Flutter packages
         script: flutter pub get
       - name: Build APK
-        script: flutter build apk --release
+        script: flutter build apk --release --no-tree-shake-icons
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
